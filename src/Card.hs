@@ -31,12 +31,15 @@ showValue n = show n
 instance Show Card where
     show (Card n s) = showValue n++" "++show s
 
--- | card must be 1 less and opposite color
-canPutOnPileTop :: Card -> Card -> Bool
-canPutOnPileTop card top = diff == 1 && cardColor top /= cardColor card where diff = cardValue top - cardValue card
+-- -- | card must be 1 less and opposite color
+-- canPutOnPileTop :: Card -> Card -> Either String ()
+-- canPutOnPileTop card top | cardValue top - cardValue card /= 1 = Left "card must be 1 less than top card"
+-- canPutOnPile
 
--- | card must be 1 more and same suit
-canPutOnFoundationTop :: Card -> Card -> Bool
-canPutOnFoundationTop card top = diff == 1 && cardSuit top == cardSuit card where diff = cardValue card - cardValue top
+-- -- && cardColor top /= cardColor card where diff = 
+
+-- -- | card must be 1 more and same suit
+-- canPutOnFoundationTop :: Card -> Card -> Either String ()
+-- canPutOnFoundationTop card top = diff == 1 && cardSuit top == cardSuit card where diff = cardValue card - cardValue top
 
 
