@@ -28,6 +28,8 @@ library
       Card
       Game
       Lib
+      Move
+      Parse
       Render
   other-modules:
       Paths_solitaire
@@ -38,6 +40,7 @@ library
     , boxes
     , lens
     , mtl
+    , parsec
   default-language: Haskell2010
 
 executable solitaire-exe
@@ -52,6 +55,7 @@ executable solitaire-exe
     , boxes
     , lens
     , mtl
+    , parsec
     , solitaire
   default-language: Haskell2010
 
@@ -68,5 +72,6 @@ test-suite solitaire-test
     , boxes
     , lens
     , mtl
+    , parsec
     , solitaire
   default-language: Haskell2010

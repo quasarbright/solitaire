@@ -24,6 +24,7 @@ dependencies:
 - lens
 - mtl
 - boxes
+- parsec
 
 library:
   source-dirs: src
