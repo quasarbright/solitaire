@@ -57,7 +57,14 @@ bFoundations :: (Foundation, Foundation, Foundation, Foundation) -> Box
 bFoundations (a,b,c,d) = hsep 1 top (fmap bFoundation [a,b,c,d])
 
 bGame :: Game -> Box
-bGame (Game deck draws foundations piles) = undefined
+bGame (Game deck draws foundations piles) =
+   vcat left
+      [ text "Deck:" <+> bDeck deck
+      , text "Draws:" <+> bDraws draws
+      , text "Foundations:" <+> bFoundations foundations
+      , text "Piles:"
+      , bPiles piles
+      ]
 
 renderGame :: Game -> String
 renderGame = render . bGame
