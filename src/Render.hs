@@ -1,4 +1,4 @@
-module Render where
+module Render(renderGame) where
 
 import Game
 import Card
@@ -34,7 +34,7 @@ bPile (Pile [] []) = text "--"
 bPile (Pile hiddens showns) = vcat right (replicate (length hiddens) (text "??")) // bCardsV (reverse showns)
 
 bPiles :: [Pile] -> Box
-bPiles piles = hsep 1 top (fmap bPile piles)
+bPiles piles = hsep 1 top (zipWith (\i pile -> text (show i) // bPile pile) [1..] piles)
 
 bStack :: [Card] -> Box
 bStack [] = text "--"
