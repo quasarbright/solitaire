@@ -12,6 +12,7 @@ import Control.Monad.State
 import Data.Tuple (swap)
 import Control.Monad.Except
 import Data.Functor
+import Control.Arrow ((>>>))
 
 type Deck = [Card]
 
@@ -245,3 +246,9 @@ getGameState = do
             then Won
             else InProgress
     -- TODO loss analysis
+
+runGame :: Game -> StateT Game (Except Error) a -> Either Error (a, Game)
+runGame s = flip runStateT s >>> runExcept
+
+runMove :: Game -> StateT Game (Except Error) a -> Either Error Game
+runMove s = fmap snd . runGame s
