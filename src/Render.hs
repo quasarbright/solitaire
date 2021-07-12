@@ -23,6 +23,12 @@ blank spots are --
 
 -}
 
+emptyPlaceholder :: String
+emptyPlaceholder = "--"
+
+hiddenPlaceholder :: String
+hiddenPlaceholder = "?? ?"
+
 bCard :: Card -> Box
 bCard = text . show
 
@@ -30,19 +36,19 @@ bCardsV :: [Card] -> Box
 bCardsV = vcat right . fmap bCard
 
 bPile :: Pile -> Box
-bPile (Pile [] []) = text "--"
-bPile (Pile hiddens showns) = vcat right (replicate (length hiddens) (text "??")) // bCardsV (reverse showns)
+bPile (Pile [] []) = text emptyPlaceholder
+bPile (Pile hiddens showns) = vcat right (replicate (length hiddens) (text hiddenPlaceholder) ++ fmap bCard (reverse showns))
 
 bPiles :: [Pile] -> Box
-bPiles piles = hsep 1 top (zipWith (\i pile -> text (show i) // bPile pile) [0..] piles)
+bPiles piles = hsep 2 top (zipWith (\i pile -> text (show i) // bPile pile) [0..] piles)
 
 bStack :: [Card] -> Box
-bStack [] = text "--"
+bStack [] = text emptyPlaceholder
 bStack (c:_) = bCard c
 
 bStackHidden :: [Card] -> Box
-bStackHidden [] = text "--"
-bStackHidden _ = text "??"
+bStackHidden [] = text emptyPlaceholder
+bStackHidden _ = text hiddenPlaceholder
 
 bDeck :: Deck -> Box
 bDeck = bStackHidden
