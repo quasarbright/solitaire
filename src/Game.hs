@@ -13,6 +13,7 @@ import Data.Tuple (swap)
 import Control.Monad.Except
 import Data.Functor
 import Control.Arrow ((>>>))
+import System.Random.Shuffle(shuffleM)
 
 type Deck = [Card]
 
@@ -77,7 +78,8 @@ defaultDeck = concat [withSuit Spades values, withSuit Diamonds values, withSuit
     withSuit s cs = flip Card s <$> cs
     values = [Ace .. King]
 
--- TODO shuffled
+shuffledDeck :: IO [Card]
+shuffledDeck = shuffleM defaultDeck
 
 -- | the number of piles in a game of solitaire
 numPiles :: Int
@@ -85,9 +87,17 @@ numPiles = 7
 
 -- | get the top card from the deck and return it (does not put it in the draw pile)
 popDeck :: (MonadState Game m, MonadError Error m) => m Card
-popDeck = gets (^. gameDeck) >>= \case
-    [] -> throwError "cannot draw from empty deck"
-    c:cs -> (gameDeck .= cs) $> c
+popDeck = do
+    deck <- gets (^. gameDeck)
+    draws <- gets (^. gameDraws)
+    case (deck, draws) of
+        ([], []) -> throwError "cannot draw from empty deck"
+        ([], cs) -> do
+            -- flip draw pile over and that's the new deck
+            gameDeck .= reverse cs
+            gameDraws .= []
+            popDeck
+        (c:cs, _) -> (gameDeck .= cs) $> c
 
 -- | get the top n cards from the deck and return them as a list
 popDeckN :: (MonadState Game m, MonadError Error m) => Int -> m [Card]
