@@ -42,6 +42,7 @@ library
     , lens
     , mtl
     , parsec
+    , random-shuffle
     , repline
   default-language: Haskell2010
 
@@ -58,6 +59,7 @@ executable solitaire-exe
     , lens
     , mtl
     , parsec
+    , random-shuffle
     , repline
     , solitaire
   default-language: Haskell2010
@@ -76,6 +78,7 @@ test-suite solitaire-test
     , lens
     , mtl
     , parsec
+    , random-shuffle
     , repline
     , solitaire
   default-language: Haskell2010

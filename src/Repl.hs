@@ -1,4 +1,5 @@
 {-# LANGUAGE FlexibleContexts #-}
+{-# LANGUAGE LambdaCase #-}
 module Repl where
 
 import Game
@@ -31,6 +32,14 @@ printGame = do
 
 exec :: String -> Repl ()
 exec source = do
+    getGameState >>= \case
+      InProgress -> return ()
+      Won -> liftIO $ do
+          putStrLn "You won!"
+          exitSuccess 
+      Lost -> liftIO $ do
+          putStrLn "You lost :("
+          exitSuccess
     move <- hoistError (parseMove source)
     g <- get
     put =<< hoistError (runMove g (performMove move))
@@ -67,9 +76,10 @@ opts = [(name, f) | (name, f, _) <- commands]
 ----------------------------------------
 
 shell :: Repl a -> IO ()
-shell pre =
-  flip evalStateT (fromRight emptyGame $ makeGame defaultDeck) $
-    evalRepl (const $ pure "Solitaire> ") exec opts (Just ':') Nothing File pre (pure Exit)
+shell pre = do
+    deck <- shuffledDeck
+    flip evalStateT (fromRight emptyGame $ makeGame deck) $
+        evalRepl (const $ pure "Solitaire> ") exec opts (Just ':') Nothing File pre (pure Exit)
 
 run :: IO ()
 run = shell printGame

@@ -26,6 +26,7 @@ dependencies:
 - boxes
 - parsec
 - repline
+- random-shuffle
 
 library:
   source-dirs: src
